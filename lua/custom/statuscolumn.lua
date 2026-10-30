@@ -6,9 +6,9 @@
 
 local M = {}
 
--- Fold levels drawn as lines; deeper folds are hidden (a closed one still shows ▸)
+-- Fold levels drawn as lines; deeper folds are hidden (a closed one still shows +)
 local MAX_DEPTH = 1
-local ICONS = { open = '-', closed = '▸', mid = '│', last = '╰' }
+local ICONS = { open = '-', closed = '+', mid = '│', last = '╰' }
 
 -- Neovim's internal fold lookup, the same one the builtin 'foldcolumn' uses.
 -- `foldlevel()` can't tell where a fold starts, so without this, sibling folds
@@ -107,7 +107,7 @@ local function numbers(win, lnum, relnum, virtnum, last)
 
   local cur = relnum == 0
   return table.concat {
-    cur and '%#CursorLineNr#' or '%#LineNr#',
+    cur and '%#StatusColumnNumCur#' or '%#LineNr#',
     pad(lnum, abs_width),
     ' ',
     cur and '%#StatusColumnRelNumCur#' or '%#StatusColumnRelNum#',
@@ -144,10 +144,12 @@ function _G.StatusColumnFoldClick(level, _, button)
   end)
 end
 
--- Relative numbers in the theme's foreground color, with the cursor line's 0 in red
+-- Cursor line's number in purple; relative numbers in the theme's foreground color,
+-- with the cursor line's 0 in red
 local function set_highlights()
   local ok, dracula = pcall(require, 'dracula')
-  local colors = ok and dracula.colors() or { fg = '#F8F8F2', red = '#FF5555' }
+  local colors = ok and dracula.colors() or { fg = '#F8F8F2', red = '#FF5555', purple = '#BD93F9' }
+  vim.api.nvim_set_hl(0, 'StatusColumnNumCur', { fg = colors.purple, bold = true })
   vim.api.nvim_set_hl(0, 'StatusColumnRelNum', { fg = colors.fg })
   vim.api.nvim_set_hl(0, 'StatusColumnRelNumCur', { fg = colors.red })
 end
