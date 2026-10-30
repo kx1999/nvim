@@ -108,9 +108,9 @@ do
 
   -- Make line numbers default
   vim.o.number = true
-  -- You can also add relative line numbers, to help with jumping.
-  --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  -- Relative line numbers. Required by the status column below: without it,
+  --  moving the cursor doesn't redraw the column, so relative numbers go stale.
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -134,8 +134,10 @@ do
   vim.o.ignorecase = true
   vim.o.smartcase = true
 
-  -- Keep signcolumn on by default
-  vim.o.signcolumn = 'yes'
+  -- Status column, left to right: git signs | fold tree | line number | relative number
+  --  See `lua/custom/statuscolumn.lua`
+  vim.o.foldlevelstart = 99
+  require('custom.statuscolumn').setup()
 
   -- Decrease update time
   vim.o.updatetime = 250
@@ -564,6 +566,7 @@ do
   vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
   vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
   vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+  vim.keymap.set('n', '<leader>si', function() require('telescope.builtin').find_files({ hidden = true }) end, { desc = '[S]earch H[i]dden Files' })
 
   -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
   -- If you later switch picker plugins, this is where to update these mappings.
@@ -966,8 +969,8 @@ do
 
     -- Enable treesitter based folds
     -- For more info on folds see `:help folds`
-    -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    -- vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldmethod = 'expr'
 
     -- Check if treesitter indentation is available for this language, and if so enable it
     -- in case there is no indent query, the indentexpr will fallback to the vim's built in one
