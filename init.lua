@@ -108,9 +108,9 @@ do
 
   -- Make line numbers default
   vim.o.number = true
-  -- You can also add relative line numbers, to help with jumping.
-  --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  -- Relative line numbers. Required by the status column below: without it,
+  --  moving the cursor doesn't redraw the column, so relative numbers go stale.
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -134,12 +134,10 @@ do
   vim.o.ignorecase = true
   vim.o.smartcase = true
 
-  -- Status column, left to right: git signs | fold column | line number | relative number
-  --  Signs and folds only take space when present; both numbers are always shown.
-  vim.o.signcolumn = 'auto:1'
-  vim.o.foldcolumn = 'auto:1'
+  -- Status column, left to right: git signs | fold tree | line number | relative number
+  --  See `lua/custom/statuscolumn.lua`
   vim.o.foldlevelstart = 99
-  vim.o.statuscolumn = "%s%C%=%{v:virtnum ? '' : printf('%4d %3d', v:lnum, v:relnum)} "
+  require('custom.statuscolumn').setup()
 
   -- Decrease update time
   vim.o.updatetime = 250
