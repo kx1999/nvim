@@ -1,13 +1,14 @@
 -- Custom 'statuscolumn', left to right:
---   git signs | fold tree (clickable, up to 5 levels deep) | line number | relative number
+--   git signs | fold tree (clickable, outermost level only) | line number | relative number
 --
 -- Signs and the fold tree only take up space when present; both numbers are always shown.
 -- See `:help 'statuscolumn'`
 
 local M = {}
 
-local MAX_DEPTH = 5
-local ICONS = { open = '╭', closed = '▸', mid = '│', last = '╰' }
+-- Fold levels drawn as lines; deeper folds are hidden (a closed one still shows ▸)
+local MAX_DEPTH = 1
+local ICONS = { open = '-', closed = '▸', mid = '│', last = '╰' }
 
 -- Neovim's internal fold lookup, the same one the builtin 'foldcolumn' uses.
 -- `foldlevel()` can't tell where a fold starts, so without this, sibling folds
