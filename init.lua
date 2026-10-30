@@ -134,8 +134,12 @@ do
   vim.o.ignorecase = true
   vim.o.smartcase = true
 
-  -- Keep signcolumn on by default
-  vim.o.signcolumn = 'yes'
+  -- Status column, left to right: git signs | fold column | line number | relative number
+  --  Signs and folds only take space when present; both numbers are always shown.
+  vim.o.signcolumn = 'auto:1'
+  vim.o.foldcolumn = 'auto:1'
+  vim.o.foldlevelstart = 99
+  vim.o.statuscolumn = "%s%C%=%{v:virtnum ? '' : printf('%4d %3d', v:lnum, v:relnum)} "
 
   -- Decrease update time
   vim.o.updatetime = 250
@@ -966,8 +970,8 @@ do
 
     -- Enable treesitter based folds
     -- For more info on folds see `:help folds`
-    -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    -- vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldmethod = 'expr'
 
     -- Check if treesitter indentation is available for this language, and if so enable it
     -- in case there is no indent query, the indentexpr will fallback to the vim's built in one
