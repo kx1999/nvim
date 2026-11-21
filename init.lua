@@ -876,6 +876,7 @@ do
   -- require('luasnip.loaders.from_vscode').lazy_load()
 
   -- [[ Autocomplete Engine ]]
+  vim.pack.add({ 'https://github.com/saghen/blink.lib'} )
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
   require('blink.cmp').setup {
     keymap = {
@@ -1023,6 +1024,17 @@ do
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
   -- require 'kickstart.plugins.neo-tree'
+
+  -- [[ Colemak ]] vim navigation on the physical hjkl keys (h n e i).
+  --  Each line is one independent change; comment it out to disable it (restart nvim).
+  --  Details are at the top of each file in `lua/custom/colemak/`. Keep this order:
+  --  mini_ai must load before motions so `l` keeps mini.ai's text objects.
+  require 'custom.colemak.mini_ai' -- text objects: `i` -> `l` (ciw -> clw), ii -> ll, il -> li
+  require 'custom.colemak.motions' -- h n e i movement; j/k/l/J/K/L get n/e/i/N/E/I's old jobs
+  require 'custom.colemak.windows' -- <C-h/n/e/i> and <C-w> + n/e/i window navigation
+  require 'custom.colemak.gitsigns' -- hunk text object `ih` -> `lh`
+  require 'custom.colemak.telescope' -- picker normal mode: n/e next/prev result
+  require 'custom.colemak.lsp' -- LSP hover on `E` (was `K`)
 
   -- NOTE: You can add your own plugins, configuration, etc. in `lua/custom/plugins/*.lua`.
   --
